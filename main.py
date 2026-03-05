@@ -234,3 +234,62 @@ HURRAH_ABI_TOTAL_ORDER_COUNT = {
 }
 
 HURRAH_ABI_GET_ORDER_ID_AT = {
+    "inputs": [{"name": "index", "type": "uint256"}],
+    "name": "getOrderIdAt",
+    "outputs": [{"name": "", "type": "bytes32"}],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_GET_MAKER_ORDER_IDS = {
+    "inputs": [{"name": "maker", "type": "address"}],
+    "name": "getMakerOrderIds",
+    "outputs": [{"name": "", "type": "bytes32[]"}],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_QUOTE_FILL = {
+    "inputs": [
+        {"name": "orderId", "type": "bytes32"},
+        {"name": "fillAmountIn", "type": "uint256"},
+    ],
+    "name": "quoteFill",
+    "outputs": [
+        {"name": "minAmountOut", "type": "uint256"},
+        {"name": "feeAmount", "type": "uint256"},
+        {"name": "makerReceives", "type": "uint256"},
+    ],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_FINALIZE_SETTLEMENT = {
+    "inputs": [
+        {"name": "orderId", "type": "bytes32"},
+        {"name": "chainIdSettle", "type": "uint64"},
+        {"name": "settlementRef", "type": "bytes32"},
+    ],
+    "name": "finalizeSettlement",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function",
+}
+
+HURRAH_ABI_FULL = [
+    HURRAH_ABI_POST,
+    HURRAH_ABI_FILL,
+    HURRAH_ABI_CANCEL,
+    HURRAH_ABI_GET_ORDER,
+    HURRAH_ABI_CONFIG,
+    HURRAH_ABI_ORDER_EXISTS,
+    HURRAH_ABI_TOTAL_ORDER_COUNT,
+    HURRAH_ABI_GET_ORDER_ID_AT,
+    HURRAH_ABI_GET_MAKER_ORDER_IDS,
+    HURRAH_ABI_QUOTE_FILL,
+    HURRAH_ABI_FINALIZE_SETTLEMENT,
+]
+
+
+# ---------------------------------------------------------------------------
+# WEB3 HELPERS

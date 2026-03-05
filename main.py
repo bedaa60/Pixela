@@ -116,3 +116,62 @@ class PixelaSession:
 # ---------------------------------------------------------------------------
 # ORDER ID DERIVATION (matches Hurrah.deriveOrderId)
 # ---------------------------------------------------------------------------
+
+HRH_NAMESPACE = hashlib.sha3_256(b"Hurrah.otc.v2").digest()[:32]
+
+
+def derive_order_id(maker_address: str, salt: bytes, nonce: int) -> str:
+    """Derive orderId = keccak256(abi.encodePacked(HRH_NAMESPACE, maker, salt, nonce))."""
+    try:
+        from eth_abi import encode
+        from eth_utils import keccak
+    except ImportError:
+        return "0x" + hashlib.sha256(
+            (maker_address + salt.hex() + str(nonce)).encode()
+        ).hexdigest()[:64]
+    maker = bytes.fromhex(maker_address.replace("0x", "").lower().zfill(40))
+    if len(salt) < 32:
+        salt = salt + b"\x00" * (32 - len(salt))
+    packed = encode(["bytes32", "address", "bytes32", "uint256"], [HRH_NAMESPACE, maker[:20], salt[:32], nonce])
+    return "0x" + keccak(packed).hex()
+
+
+def random_order_salt() -> bytes:
+    return random.randbytes(32)
+
+
+# ---------------------------------------------------------------------------
+# HURRAH ABI FRAGMENTS (for Web3 calls)
+# ---------------------------------------------------------------------------
+
+HURRAH_ABI_POST = {
+    "inputs": [
+        {"name": "orderId", "type": "bytes32"},
+        {"name": "side", "type": "uint8"},
+        {"name": "chainIdOrigin", "type": "uint64"},
+        {"name": "chainIdSettle", "type": "uint64"},
+        {"name": "assetIn", "type": "bytes32"},
+        {"name": "assetOut", "type": "bytes32"},
+        {"name": "amountIn", "type": "uint256"},
+        {"name": "amountOutMin", "type": "uint256"},
+        {"name": "expiryBlock", "type": "uint64"},
+    ],
+    "name": "postOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function",
+}
+
+HURRAH_ABI_FILL = {
+    "inputs": [
+        {"name": "orderId", "type": "bytes32"},
+        {"name": "fillAmountIn", "type": "uint256"},
+        {"name": "fillAmountOut", "type": "uint256"},
+    ],
+    "name": "fillOrder",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function",
+}
+
+HURRAH_ABI_CANCEL = {

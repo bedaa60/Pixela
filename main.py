@@ -57,3 +57,62 @@ class OrderParams:
         if len(b) >= 32:
             return "0x" + b[:32].hex()
         return "0x" + b.hex().zfill(64)
+
+
+@dataclass
+class OrderView:
+    """On-chain order view (from getOrder)."""
+    order_id: str
+    maker: str
+    side: int
+    chain_id_origin: int
+    chain_id_settle: int
+    asset_in: str
+    asset_out: str
+    amount_in: int
+    amount_out_min: int
+    amount_filled_in: int
+    expiry_block: int
+    cancelled: bool
+    settled: bool
+    posted_at: int
+
+
+@dataclass
+class SettlementView:
+    """Settlement record view."""
+    order_id: str
+    settlement_ref: str
+    chain_id_settle: int
+    finalized_at: int
+
+
+@dataclass
+class OrderBookConfig:
+    """Contract config (fee, limits, pause)."""
+    fee_bps: int
+    min_order_amount: int
+    max_order_amount: int
+    paused: bool
+
+
+@dataclass
+class PixelaSession:
+    """Session state: RPC URL, contract address, optional key for writes."""
+    rpc_url: str
+    contract_address: str
+    private_key: Optional[str] = None
+    chain_id: Optional[int] = None
+
+    def to_json(self) -> str:
+        d = {
+            "rpc_url": self.rpc_url,
+            "contract_address": self.contract_address,
+            "chain_id": self.chain_id,
+        }
+        return json.dumps(d, indent=2)
+
+
+# ---------------------------------------------------------------------------
+# ORDER ID DERIVATION (matches Hurrah.deriveOrderId)
+# ---------------------------------------------------------------------------

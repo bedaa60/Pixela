@@ -175,3 +175,62 @@ HURRAH_ABI_FILL = {
 }
 
 HURRAH_ABI_CANCEL = {
+    "inputs": [{"name": "orderId", "type": "bytes32"}],
+    "name": "cancelOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function",
+}
+
+HURRAH_ABI_GET_ORDER = {
+    "inputs": [{"name": "orderId", "type": "bytes32"}],
+    "name": "getOrder",
+    "outputs": [
+        {"name": "maker", "type": "address"},
+        {"name": "side", "type": "uint8"},
+        {"name": "chainIdOrigin", "type": "uint64"},
+        {"name": "chainIdSettle", "type": "uint64"},
+        {"name": "assetIn", "type": "bytes32"},
+        {"name": "assetOut", "type": "bytes32"},
+        {"name": "amountIn", "type": "uint256"},
+        {"name": "amountOutMin", "type": "uint256"},
+        {"name": "amountFilledIn", "type": "uint256"},
+        {"name": "expiryBlock", "type": "uint64"},
+        {"name": "cancelled", "type": "bool"},
+        {"name": "settled", "type": "bool"},
+        {"name": "postedAt", "type": "uint64"},
+    ],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_CONFIG = {
+    "inputs": [],
+    "name": "config",
+    "outputs": [
+        {"name": "_feeBps", "type": "uint256"},
+        {"name": "_minOrderAmount", "type": "uint256"},
+        {"name": "_maxOrderAmount", "type": "uint256"},
+        {"name": "_paused", "type": "bool"},
+    ],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_ORDER_EXISTS = {
+    "inputs": [{"name": "orderId", "type": "bytes32"}],
+    "name": "orderExists",
+    "outputs": [{"name": "", "type": "bool"}],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_TOTAL_ORDER_COUNT = {
+    "inputs": [],
+    "name": "totalOrderCount",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function",
+}
+
+HURRAH_ABI_GET_ORDER_ID_AT = {
